@@ -1,0 +1,101 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://block-dodge/actors/player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://block-dodge/screens/save-and-load-example.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 328, 8 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 10, 400 )
+
+[node name="save-and-load-example" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 512, 304 )
+speed = 700
+
+[node name="Top" type="ColorRect" parent="."]
+margin_right = 1020.0
+margin_bottom = 10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Area2D" type="Area2D" parent="Top"]
+scale = Vector2( 1.6, 1 )
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Top/Area2D"]
+position = Vector2( 325, 0 )
+scale = Vector2( 0.985712, 1.74783 )
+shape = SubResource( 1 )
+
+[node name="WallRight" type="ColorRect" parent="."]
+margin_left = 1018.51
+margin_top = -0.330322
+margin_right = 1028.51
+margin_bottom = 799.67
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Area2D" type="Area2D" parent="WallRight"]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallRight/Area2D"]
+position = Vector2( 10.49, 400.33 )
+shape = SubResource( 2 )
+
+[node name="WallLeft" type="ColorRect" parent="."]
+margin_right = 10.0
+margin_bottom = 800.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Area2D" type="Area2D" parent="WallLeft"]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallLeft/Area2D"]
+position = Vector2( 10.49, 400.33 )
+shape = SubResource( 2 )
+
+[node name="Bottom" type="ColorRect" parent="."]
+margin_top = 790.0
+margin_right = 1020.0
+margin_bottom = 800.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Area2D" type="Area2D" parent="Bottom"]
+scale = Vector2( 1.6, 1 )
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bottom/Area2D"]
+position = Vector2( 322.5, 13 )
+scale = Vector2( 0.985712, 1.74783 )
+shape = SubResource( 1 )
+
+[node name="enemyContainerTop" type="Node2D" parent="."]
+position = Vector2( 512, -232 )
+
+[node name="enemyContainerLeft" type="Node2D" parent="."]
+position = Vector2( -680, 392 )
+
+[node name="progressionTimer" type="Timer" parent="."]
+wait_time = 0.75
+autostart = true
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="playerDied" from="player" to="." method="_on_player_playerDied"]
+[connection signal="timeout" from="progressionTimer" to="." method="_on_progressionTimer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

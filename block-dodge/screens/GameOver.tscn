@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://block-dodge/screens/GameOver.gd" type="Script" id=1]
+
+[node name="Control" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( -1376, -48 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="GameOver" type="ColorRect" parent="."]
+margin_left = -40.0
+margin_top = -144.0
+margin_right = 1128.0
+margin_bottom = 896.0
+color = Color( 0, 0, 0, 1 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GameOver"]
+margin_left = 496.0
+margin_top = 216.0
+margin_right = 580.0
+margin_bottom = 236.0
+rect_scale = Vector2( 2, 2 )
+size_flags_vertical = 1
+text = "Game Over!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Checkpoint" type="Button" parent="GameOver"]
+margin_left = 456.0
+margin_top = 384.0
+margin_right = 576.0
+margin_bottom = 420.0
+rect_scale = Vector2( 2, 2 )
+text = "Load Last Save"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Startover" type="Button" parent="GameOver"]
+margin_left = 456.0
+margin_top = 504.0
+margin_right = 576.0
+margin_bottom = 540.0
+rect_scale = Vector2( 2, 2 )
+text = "Start Over"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Quit" type="Button" parent="GameOver"]
+margin_left = 456.0
+margin_top = 616.0
+margin_right = 576.0
+margin_bottom = 652.0
+rect_scale = Vector2( 2, 2 )
+text = "Quit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="GameOver/Checkpoint" to="GameOver" method="_on_Checkpoint_pressed"]
+[connection signal="pressed" from="GameOver/Startover" to="GameOver" method="_on_Startover_pressed"]
+[connection signal="pressed" from="GameOver/Quit" to="GameOver" method="_on_Quit_pressed"]
