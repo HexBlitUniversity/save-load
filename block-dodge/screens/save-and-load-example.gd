@@ -59,7 +59,6 @@ func spawn_entity_top():
 	var position = Vector2(rng.randi_range(-650,-100),enemy_container_top.position.y)
 	entity.position = position	
 	enemy_container_top.add_child(entity)
-	entity.set_owner(self)
 	entity.rotate_degrees_and_color(Vector2.DOWN, 1,0, 0)
 	
 	
@@ -68,8 +67,7 @@ func spawn_entity_left():
 	entity = enemy_long.instance()
 	var position = Vector2(enemy_container_left.position.y,rng.randi_range(80,875))
 	entity.position = position	
-	enemy_container_left.add_child(entity)
-	entity.set_owner(self)
+	enemy_container_left.add_child(entity)	
 	entity.rotate_degrees_and_color(Vector2.RIGHT, 0,0, 1)
 	
 	
@@ -78,9 +76,6 @@ func spawn_flying_rect():
 	entity = enemy_rect.instance()
 	entity.position = enemy_container_top.position
 	enemy_container_top.add_child(entity)
-	entity.set_owner(self)
 	entity.look_at(player.position)
 	entity.set_trajectory(player.get("global_position"))
-	
-
 
