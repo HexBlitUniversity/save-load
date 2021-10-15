@@ -6,7 +6,9 @@
 
 [sub_resource type="RectangleShape2D" id=2]
 
-[node name="player" type="KinematicBody2D"]
+[node name="player" type="KinematicBody2D" groups=[
+"saveable",
+]]
 position = Vector2( 9.67032, 0.840897 )
 collision_layer = 4
 collision_mask = 6

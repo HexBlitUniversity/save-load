@@ -30,3 +30,17 @@ func increase_progress():
 func get_progress():
 	return int(progress.value)
 	
+func save():
+	return {
+		"progress" : progress.value,
+		"pos_x" : position.x,
+		"pos_y" : position.y,
+	}
+
+func load_save(data):
+	if not data:
+		return
+	
+	progress.value = data["progress"]
+	position.x = data["pos_x"]
+	position.y = data["pos_y"]

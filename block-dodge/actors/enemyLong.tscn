@@ -8,7 +8,9 @@ extents = Vector2( 450.946, 21.1237 )
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 355.899, 19.8023 )
 
-[node name="enemyLong" type="KinematicBody2D"]
+[node name="enemyLong" type="KinematicBody2D" groups=[
+"saveable",
+]]
 script = ExtResource( 1 )
 speed = 500
 

@@ -8,13 +8,19 @@ onready var timer = $Timer
 onready var progression = $progressionTimer
 onready var progress = $player/ProgressBar
 onready var enemy_long = load("res://block-dodge/actors/enemyLong.tscn")
-onready var enemy_rect = load("res://block-dodge/actors/enemyLong.tscn") 
+onready var enemy_rect = load("res://block-dodge/actors/enemyRect.tscn") 
 
 var rng = RandomNumberGenerator.new() 	
 
+var SAVE_DIR = "user://save/"
+var SAVE_FILE = "game_data.save"
+
 func _ready():
+	load_save()
+	
 	timer.start()
 	progression.start()
+	
 
 func _unhandled_input(event):
 	if event.is_action_pressed("pause"):
@@ -25,7 +31,8 @@ func _on_Timer_timeout():
 	spawn_entity()
 
 func _on_progressionTimer_timeout():
-	player.increase_progress()		
+	player.increase_progress()	
+	save()	
 	if player.get_progress() >= 100:
 		get_tree().change_scene("res://block-dodge/screens/GameOver.tscn")
 	
@@ -78,4 +85,65 @@ func spawn_flying_rect():
 	enemy_container_top.add_child(entity)
 	entity.look_at(player.position)
 	entity.set_trajectory(player.get("global_position"))
+	
+func save():
+	var dir = Directory.new()
+	if !dir.dir_exists(SAVE_DIR):
+		dir.make_dir(SAVE_DIR)
+	
+	var save_game = File.new()
+	save_game.open(str(SAVE_DIR,SAVE_FILE),File.WRITE)
+	var save_data = {} 
+	
+	var find_saveable_nodes = get_tree().get_nodes_in_group("saveable")
+	for saveable in find_saveable_nodes:
+		if !saveable.has_method("save"):
+			print("Saveable node is missing a save() function... skipped.")
+			continue
+		
+		save_data[saveable.name] = saveable.call("save")
+	
+	var data_string = var2str(save_data)
+	save_game.store_string(data_string)
+	save_game.close()
+	
+func load_save():
+	var save_game = File.new()
+	if !save_game.file_exists(str(SAVE_DIR,SAVE_FILE)):
+		print("No save file detected.")
+		return
+	
+	save_game.open(str(SAVE_DIR,SAVE_FILE),File.READ)
+	var data_string = save_game.get_as_text()
+	var save_data : Dictionary = str2var(data_string)
+	
+	if save_data.has("player"):
+		player.load_save(save_data["player"])		
+		save_data.erase("player")
+	
+	for node_name in save_data.keys():
+		if "enemyRect" in node_name:
+			var entity = null 
+			entity = enemy_rect.instance()
+			enemy_container_top.add_child(entity)
+			entity.load_save(save_data[node_name])
+		
+		if "enemyLong" in node_name:
+			var entity = null 
+			entity = enemy_long.instance()
+			if !save_data[node_name].has("parent_name"):
+				continue
+			
+			var enemy_save_data = save_data[node_name] 
+			if "Top" in enemy_save_data["parent_name"]:
+				enemy_container_top.add_child(entity)
+			else:
+				enemy_container_left.add_child(entity)
+				entity.rotate_degrees_and_color(Vector2.RIGHT,0,0,1)
+			entity.load_save(enemy_save_data)
+			
+	 
+	print(save_data)
+	save_game.close()
+
 

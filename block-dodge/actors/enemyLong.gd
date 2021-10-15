@@ -24,4 +24,27 @@ func rotate_degrees_and_color(direction :Vector2, r:int,g:int, b:int):
 	rectOne.color = block_color
 	rectTwo.color = block_color
 
+func save(): 
+	return {
+		"pos_x" : position.x,
+		"pos_y" : position.y,
+		"block_direction_x" : block_direction.x,
+		"block_direction_y" : block_direction.y,
+		"block_color_red" : block_color.r,
+		"block_color_green" : block_color.g,
+		"block_color_blue" : block_color.b,
+		"parent_name" : get_parent().name,
+	}
+
+func load_save(data):
+	if not data:
+		return 
+		
+	position.x = data["pos_x"]
+	position.y = data["pos_y"]
+	block_direction.x = data["block_direction_x"]
+	block_direction.y = data["block_direction_y"]
+	block_color = Color(data["block_color_red"],data["block_color_green"], data["block_color_blue"])
+	rectOne.color = block_color
+	rectTwo.color = block_color
  
