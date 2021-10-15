@@ -8,7 +8,7 @@ onready var timer = $Timer
 onready var progression = $progressionTimer
 onready var progress = $player/ProgressBar
 onready var enemy_long = load("res://block-dodge/actors/enemyLong.tscn")
-onready var enemy_rect = load("res://block-dodge/actors/enemyLong.tscn") 
+onready var enemy_rect = load("res://block-dodge/actors/enemyRect.tscn") 
 
 var rng = RandomNumberGenerator.new() 	
 
