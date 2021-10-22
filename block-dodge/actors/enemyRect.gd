@@ -26,9 +26,7 @@ func set_trajectory(playerPosition : Vector2):
 		trajectory = (playerPosition - global_position).normalized()
 
 func save(): 
-	return { "pos_x" : position.x,
-			 "pos_y" : position.y,
-			 "trajectory" : trajectory,
+	return { "trajectory" : trajectory,
 			 "attack" : attack,
 			 "block_rotation" : block_rotation		
 	}
@@ -37,8 +35,6 @@ func load_save(data):
 	if not data: 
 		return
 	
-	position.x = data["pos_x"]
-	position.y = data["pos_y"]
 	trajectory = data["trajectory"]
 	attack = data["attack"]
 	block_rotation = data["block_rotation"]

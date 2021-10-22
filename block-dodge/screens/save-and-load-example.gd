@@ -28,7 +28,7 @@ func _unhandled_input(event):
 
 # Signals 
 func _on_Timer_timeout():
-	spawn_entity()
+	spawn_entity()	
 
 func _on_progressionTimer_timeout():
 	player.increase_progress()	
@@ -63,6 +63,7 @@ func spawn_random_entity():
 func spawn_entity_top():
 	var entity = null	
 	entity = enemy_long.instance()
+	entity.set_name("EnemyLongRed ")
 	var position = Vector2(rng.randi_range(-650,-100),enemy_container_top.position.y)
 	entity.position = position	
 	enemy_container_top.add_child(entity)
@@ -72,6 +73,7 @@ func spawn_entity_top():
 func spawn_entity_left():	
 	var entity  = null	
 	entity = enemy_long.instance()
+	entity.set_name("EnemyLongBlue")
 	var position = Vector2(enemy_container_left.position.y,rng.randi_range(80,875))
 	entity.position = position	
 	enemy_container_left.add_child(entity)	
@@ -94,25 +96,29 @@ func save():
 	var save_game = File.new()
 	save_game.open(str(SAVE_DIR,SAVE_FILE),File.WRITE)
 	var save_data = {} 
-	
 	var find_saveable_nodes = get_tree().get_nodes_in_group("saveable")
 	for saveable in find_saveable_nodes:
 		if !saveable.has_method("save"):
 			print("Saveable node is missing a save() function... skipped.")
 			continue
-		
+			
+		saveable.set_owner(self)
 		save_data[saveable.name] = saveable.call("save")
-	
+			
 	var data_string = var2str(save_data)
 	save_game.store_string(data_string)
 	save_game.close()
+			
+	var saveScene = PackedScene.new()
+	if saveScene.pack(self) == OK:
+		ResourceSaver.save("user://save/main.scn",saveScene)
 	
 func load_save():
 	var save_game = File.new()
 	if !save_game.file_exists(str(SAVE_DIR,SAVE_FILE)):
 		print("No save file detected.")
 		return
-	
+
 	save_game.open(str(SAVE_DIR,SAVE_FILE),File.READ)
 	var data_string = save_game.get_as_text()
 	var save_data : Dictionary = str2var(data_string)
@@ -121,28 +127,11 @@ func load_save():
 		player.load_save(save_data["player"])		
 		save_data.erase("player")
 	
-	for node_name in save_data.keys():
-		if "enemyRect" in node_name:
-			var entity = null 
-			entity = enemy_rect.instance()
-			enemy_container_top.add_child(entity)
+	for node_name in save_data.keys():		
+		var entity = find_node(node_name,true,true)
+		if(entity != null): 		
 			entity.load_save(save_data[node_name])
-		
-		if "enemyLong" in node_name:
-			var entity = null 
-			entity = enemy_long.instance()
-			if !save_data[node_name].has("parent_name"):
-				continue
-			
-			var enemy_save_data = save_data[node_name] 
-			if "Top" in enemy_save_data["parent_name"]:
-				enemy_container_top.add_child(entity)
-			else:
-				enemy_container_left.add_child(entity)
-				entity.rotate_degrees_and_color(Vector2.RIGHT,0,0,1)
-			entity.load_save(enemy_save_data)
-			
-	 
+				 
 	print(save_data)
 	save_game.close()
 

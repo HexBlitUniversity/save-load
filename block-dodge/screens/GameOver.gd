@@ -6,7 +6,8 @@ func _ready():
 	pass
 
 func _on_Checkpoint_pressed():		
-	get_tree().change_scene("res://block-dodge/screens/save-and-load-example.tscn")
+	var scene = ResourceLoader.load("user://save/main.scn","PackedScene",false)
+	get_tree().change_scene_to(scene)
 
 func _on_Startover_pressed():
 	clear_save_data()

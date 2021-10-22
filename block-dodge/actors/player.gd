@@ -32,9 +32,7 @@ func get_progress():
 	
 func save():
 	return {
-		"progress" : progress.value,
-		"pos_x" : position.x,
-		"pos_y" : position.y,
+		"progress" : progress.value
 	}
 
 func load_save(data):
@@ -42,5 +40,3 @@ func load_save(data):
 		return
 	
 	progress.value = data["progress"]
-	position.x = data["pos_x"]
-	position.y = data["pos_y"]
